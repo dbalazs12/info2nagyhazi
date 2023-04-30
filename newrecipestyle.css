@@ -1,0 +1,64 @@
+#recipebox{
+    width: 1100px;
+    height:100%;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid rgb(241, 240, 240);
+    border-radius: 10px;
+    float:left;
+
+    font-weight: normal;
+    padding-left: 10px;
+}
+
+#recipename{
+    width: 600px;
+    height: 30px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding-left: 10px;
+    position:relative;
+    top:5px;
+    bottom:5px;
+    
+    font-size: 15px; 
+    
+    font-family: "Arial";
+}
+
+  select {
+    display: inline-block;
+    padding: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 16px;
+    
+    color: #333;
+    border-radius: 5px;
+  }
+  
+  select option {
+    display: inline-block;
+    padding: 5px;
+    font-size: 16px;
+    
+    color: #333;
+  }
+
+  .recipeinput {
+    height: 160px; 
+    width: 600px; 
+    resize: none; 
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding-left: 10px;
+    position:relative;
+    top:5px;
+    bottom:5px;
+    padding:10px;
+    
+    font-size: 15px; 
+    font-family: "Arial";
+  }
