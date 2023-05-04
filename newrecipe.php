@@ -10,7 +10,7 @@
         <?php include('header.php'); ?>
         <div id="frame">
             <div id="recipebox">
-                <h1 style="text-align: center; color: #777;">TOLTS FEL EGY RECEPTET!</h1></br> 
+                <h1 style="text-align: center; color: rgb(76, 134, 136);">TOLTS FEL EGY RECEPTET!</h1></br> 
                 <!--receptnev-->
                 <h2 style="color: #777; font-size: 28px;">Recept neve:</br>
                     <form action="urlap.aspx" method="post">

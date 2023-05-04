@@ -5,25 +5,48 @@
         <img src="magyarkonyha.png">
         <p>AMITOL A SZELLEM IS JOLLAKIK</p>
     </div>
+        
         <?php
-            // check if user is logged in and has common or admin user_type
-            if (isset($_SESSION['user_type']) && ($_SESSION['user_type'] == 'common' || $_SESSION['user_type'] == 'admin')) {
-                // if user is logged in and has common or admin user_type, hide the div using CSS
-                echo '<style>#headerright { display: none; }</style>';
+            session_start();
+            if (isset($_SESSION['user_id']) && isset($_SESSION['user_type'])) {
+                echo '<style>#loginbutton { display:none; }</style>';
+                echo '<style>#headerrighttext { display:none; }</style>';
             }
+            else{
+                echo '<style>#logoutbutton { display:none; }</style>';
+                echo '<style>#usernamedisplay { display:none; }</style>';
+            }
+
         ?>
         <div id="headerright">
             <!--profil-->
             <img src="user.png" id="userimage">
-            Profil/bejelentkezes
-            <form action="urlap.aspx" method="post">
-                <input class="login" type="text" placeholder="Felhasznalonev"></br>
-            <form action="urlap.aspx" method="post">
-                <input class="login" type="text" placeholder="Jelszo"></br>
-            <button id="loginbutton" type="submit">Bejelentkezes</button>
+            <a id="headerrighttext">Profil</a>
+            <a id="usernamedisplay"> <?php echo $_SESSION['username']; ?></a>
+            
+            <form action="loginpage.php">
+                <button id="loginbutton" type="submit">Bejelentkezes</button>
+            </form>
+            <form action="logout.php">              <!--valamiert csak igy latja-->          
+                <button id="logoutbutton" style="width: 100px; 
+                                                    height: 30px;
+                                                    background-color: rgb(76, 134, 136);
+                                                    border: 0px;
+                                                    border-radius: 12px;
+                                                    cursor: pointer;
+                                                    position:relative;
+                                                    top:10px;
+
+                                                    font-size: 12px;
+                                                    color:white;
+                                                    font-weight: bold;
+                                                    font-family: 'Arial';" type="submit">Kijelentkezes</button>
+            </form>
         </div>
 
     <div id="menubox">
+        <a class="custom-button" href=mainpage.php>Fooldal</a>
         <a class="custom-button" href=newrecipe.php>Recept feltoltes</a>
+        <a class="custom-button" href=loginpage.php>Kedvencek</a>
     </div>
 </div>
