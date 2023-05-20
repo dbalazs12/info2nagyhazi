@@ -16,13 +16,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $stmt->bind_param('s', $username);
   $stmt->execute();
   $result = $stmt->get_result();
-  echo 'asd';
 
   //van-e ilyen username 
   if ($result->num_rows == 1) {
     $row = $result->fetch_assoc();
-    
-    echo 'asd';
     if (password_verify($password, $row['userpassword'])) {
       $_SESSION['user_id'] = $row['user_id'];
       $_SESSION['user_type'] = $row['user_type'];

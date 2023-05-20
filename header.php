@@ -17,6 +17,32 @@
                 echo '<style>#usernamedisplay { display:none; }</style>';
             }
 
+            //a felhasznalo eleresi koreihez megnezem a tipusat
+            if(!isset($_SESSION['user_type'])){
+                $_SESSION['user_type'] = 'guest';
+            } 
+            var_dump($_SESSION['user_type']);
+
+            //displayOption megadja hogy milyen recepteket jelenitsunk meg
+            require_once 'db.php';
+            $connection = getDb();
+            
+            echo 'a aaaaaaaaaaaaaaaaaaaaaaaaaaaaa |';
+            if (isset($_GET['displayOption'])) {
+                $displayOption = mysqli_real_escape_string($connection, $_GET["displayOption"]);
+                $_SESSION['displayOption'] = $_GET['displayOption'];
+            } else if (!isset($_GET['displayOption'])){
+                $_SESSION['displayOption'] = 'all';
+            }        
+            var_dump($_SESSION['displayOption']);   
+            
+            //mealtime session valtozo
+            if(!isset($_SESSION['mealtime'])){
+                $_SESSION['mealtime'] = 'anytime';
+            }
+            var_dump($_SESSION['mealtime']);
+        
+
         ?>
         <div id="headerright">
             <!--profil-->
@@ -41,12 +67,19 @@
                                                     color:white;
                                                     font-weight: bold;
                                                     font-family: 'Arial';" type="submit">Kijelentkezes</button>
+            
             </form>
         </div>
 
+    <?php 
+        if($_SESSION['user_type'] == 'guest'){
+            $redirect = 'loginpage.php';
+        }
+        else $redirect = 'newrecipepage.php'
+    ?>
     <div id="menubox">
         <a class="custom-button" href=mainpage.php>Fooldal</a>
-        <a class="custom-button" href=newrecipe.php>Recept feltoltes</a>
-        <a class="custom-button" href=loginpage.php>Kedvencek</a>
+        <a class="custom-button" href=<?php echo $redirect; ?>>Recept feltoltes</a> 
+        <a class="custom-button" href="mainpage.php?displayOption=favorites">Kedvencek</a>
     </div>
 </div>

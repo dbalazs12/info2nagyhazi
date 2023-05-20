@@ -9,7 +9,8 @@
 
         $connection = getDb();
 
-        $query = "INSERT INTO users (username, userpassword, useremail) VALUES ('$username', '$password_hash', '$emailadress')";
+        $query = "INSERT INTO users (username, userpassword, useremail, user_type) 
+        VALUES ('$username', '$password_hash', '$emailadress', 'common')";
 
         $result = mysqli_query($connection, $query);
 

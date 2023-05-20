@@ -136,6 +136,7 @@ html{
     font-weight: bold;
     font-family: "Arial";
     text-align: center;
+    
 }
 
 #randomrecept {
@@ -147,6 +148,7 @@ html{
     top:20px;
     border-radius: 10px;
     background-color: rgba(245,247,248,255);
+    margin-bottom:20px;
 }
 
 #randomrecepttext{
@@ -167,6 +169,7 @@ html{
     font-family: "Arial";
 }
 
+
 #randombutton{
     width: 200px;
     height: 40px;
@@ -182,6 +185,37 @@ html{
     color:white;
     font-weight: bold;
     font-family: "Arial";
+}
+
+#category{
+    width: 250px;
+    height: 300px;
+    border: 2px solid rgb(241, 240, 240);
+    float: left;
+    position: relative;
+    top:20px;
+    border-radius: 10px;
+    background-color: rgba(245,247,248,255);
+}
+
+.timeofdaybutton{
+    width: 200px;
+    height: 40px;
+    background-color: rgb(76, 134, 136);
+    border: 0px;
+    border-radius: 12px;
+    position: relative;
+    left: 22px;
+    top: 15px;
+    cursor: pointer;
+    margin-top:20px;
+    margin-bottom:10px;
+    
+    font-size: 18px;
+    color:white;
+    font-weight: bold;
+    font-family: "Arial";
+
 }
 
 #userimage{
@@ -237,6 +271,3 @@ html{
     font-weight: bold;
     font-family: "Arial";
 }
-
-
-

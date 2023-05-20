@@ -42,8 +42,14 @@
                                     echo "<h1>" . $row['recipe_name'] . "</h1>";
                                 echo "</div>";
                                 echo "<div id='row'>";
-                                    echo "<button id='deletebutton'>Torles</button>";
-                                    echo "<button id='favoritebutton'>Kedvencekbe</button>";
+                                    echo "<form action='deleterecipe.php' method='post'>";
+                                        echo "<input type='hidden' name='recipe_id' value='" . $row['recipe_id'] . "'>";    
+                                        echo "<button id='deletebutton' name='submitdelete'>Torles</button>";
+                                    echo "</form>";
+                                    echo "<form action='addtofavorite.php' method='post'>";
+                                        echo "<input type='hidden' name='recipe_id' value='" . $row['recipe_id'] . "'>";    
+                                        echo "<button id='favoritebutton' name='submitfavorite'>Kedvencekbe</button>";
+                                    echo "</form>";
                                 echo "</div>";
                             echo "</div>";
                             
