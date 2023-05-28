@@ -1,0 +1,5 @@
+- moderacio legyen szebb
+- kep feltoltese recipeuploadnal/modifynal
+- a receptet lehet sql injectelni 
+- ha guest ne legyen favorites
+- user delete megcsinalni

@@ -6,6 +6,10 @@
 
         $connection = getDb();
         
+        // kitorles a kedvencekbol
+        $query = "DELETE FROM favorites WHERE recipe_id = '$recipe_id'";
+        $result = mysqli_query($connection, $query);
+
         //torles a user-recept kapcsolatbol, kulonben foreign key violatiopn
         $query = "DELETE FROM user_recipes WHERE recipe_id = '$recipe_id'";
         $result = mysqli_query($connection, $query);

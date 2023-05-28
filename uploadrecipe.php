@@ -10,13 +10,34 @@
         $ingredients = $_POST['ingredients'];
         $instructions = $_POST['instructions'];
 
+        var_dump($_FILES);
+
+        if(!empty($_FILES['image']['name'])){
+            $filename = basename($_FILES['image']['name']);
+            $filetype = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+
+            $allowtypes = array('jpg', 'png', 'jpeg', 'gif');
+            if(in_array($filetype, $allowtypes)){
+                $image = $_FILES['image']['tmp_name'];
+                $imgcontent = addslashes(file_get_contents($image));
+                var_dump($imgcontent);
+            }
+        }
+    
+
+
         $connection = getDb();
         
-        //sqli injection ellen
-        $stmt = $connection->prepare("INSERT INTO recipes (recipe_name, serving_size, preparation_time, cooking_time, ingredients, instructions) 
-        VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssss",$recipe_name,$serving_size,$preparation_time,
-        $cooking_time, $ingredients, $instructions);
+        session_start();
+        if (empty($recipe_name) || empty($serving_size) || empty($preparation_time) || empty($cooking_time) || empty($ingredients) || empty($instructions)) {
+            $_SESSION['badupload'] = 'true';
+            mysqli_close($connection);
+            //Header("Location: newrecipepage.php");
+        }else{
+        
+        $stmt = $connection->prepare("INSERT INTO recipes (recipe_name, serving_size, preparation_time, cooking_time, ingredients, instructions, recipe_image) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssssss", $recipe_name, $serving_size, $preparation_time, $cooking_time, $ingredients, $instructions, $file_name);
         $stmt->execute();
         
         session_start();
@@ -28,10 +49,11 @@
 
         $query = "INSERT INTO user_recipes(user_id, recipe_id) VALUES('$user_id', '$recipe_id')";
         $result = mysqli_query($connection, $query);
-
+        $_SESSION['badupload'] = 'false';
         mysqli_close($connection);
         
-        Header("Location: mainpage.php");
+        //Header("Location: mainpage.php");
         exit();
+        }
     }
 ?>

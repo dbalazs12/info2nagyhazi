@@ -1,36 +1,22 @@
 <!DOCTYPE html>
 <html>
+
+    <?php 
+        error_reporting(E_ALL & ~E_NOTICE);
+        session_start();
+        if($_SESSION['pagecolor'] == 'green'){
+            $cssfile = 'green_gray.css';
+        }else if ($_SESSION['pagecolor'] == 'brown'){
+            $cssfile = 'brown_gray.css';
+        }
+    
+    ?>
     <head>
         <title>Magyar Konyha - Amitol a szellem is jol lakik</title>
-        <link rel="stylesheet" href="mainpagestyle.css"> 
+        <link rel="stylesheet" href=<?php echo $cssfile ?>> 
     </head>
     
-    <!--admin csinalas-->
-    <?php
-        require_once 'db.php';
-
-        $username = 'admin';
-        $useremail = 'admin@gmail.com';
-        $userpassword = password_hash('admin', PASSWORD_DEFAULT);
-        $user_type = 'admin';
-
-        $conn = getDb();
-
-        $stmt = $conn->prepare("SELECT * FROM users WHERE username = ? OR useremail = ?");
-        $stmt->bind_param('ss', $username, $useremail);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows == 0) {
-            $stmt = $conn->prepare("INSERT INTO users (username, userpassword, useremail, user_type) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param('ssss', $username, $userpassword, $useremail, $user_type);
-            $stmt->execute();
-        }
-
-        $stmt->close();
-        $conn->close();
-    ?>
-
+    
     <body>
         <?php 
             include('header.php');
@@ -49,26 +35,68 @@
                 </div>
             </div>
             <div id="receptframe">
-            <?php
-             
-                require_once 'db.php';
-                require_once 'displayrecipes.php';
-
-                $connection = getDb();
+                <?php
                 
-                if($_SESSION['displayOption'] == 'all'){
-                    $query = "SELECT * FROM recipes";
-                    $result = mysqli_query($connection, $query);
-                    displayRecipes($result);
-                }else if($_SESSION['displayOption'] == 'favorites'){
-                    $query = "SELECT * FROM favorites WHERE user_id = '" . $_SESSION['user_id'] . "'";;
-                    $result = mysqli_query($connection, $query);
-                    displayRecipes($result);
-                }
+                    require_once 'db.php';
+                    require_once 'displayrecipes.php';
 
-                mysqli_close($connection);
-            ?>
+                    $connection = getDb();
+                    $nores = true;
 
+                    if($_SESSION['searchline'] != NULL){ 
+                        $searchline = $_SESSION['searchline'];
+                        $query = "SELECT * FROM recipes WHERE recipe_name LIKE '%$searchline%'";
+                        $result = mysqli_query($connection, $query);
+                        if (mysqli_num_rows($result) > 0) {
+                            displayRecipes($result);
+                            $nores = false;
+                        }
+                        $_SESSION['searchline'] = NULL;
+            
+                    }else if($_SESSION['displayOption'] == 'all'){
+                        $query = "SELECT * FROM recipes";
+                        $result = mysqli_query($connection, $query);
+                        if (mysqli_num_rows($result) > 0) {
+                            displayRecipes($result);
+                            $nores = false;
+                        }
+                    }else if($_SESSION['displayOption'] == 'favorites'){
+                        $query = "SELECT * FROM favorites WHERE user_id = '" . $_SESSION['user_id'] . "'";;
+                        $result = mysqli_query($connection, $query);
+                        if (mysqli_num_rows($result) > 0) {
+                            displayRecipes($result);
+                            $nores = false;
+                        }
+                    }else if($_SESSION['displayOption'] == 'breakfast'){
+                        $query = "SELECT * FROM recipes WHERE mealtime = 'breakfast'";
+                        $result = mysqli_query($connection, $query);
+                        if (mysqli_num_rows($result) > 0) {
+                            displayRecipes($result);
+                            $nores = false;
+                        }
+                    }else if($_SESSION['displayOption'] == 'lunch'){
+                        $query = "SELECT * FROM recipes WHERE mealtime = 'lunch'";
+                        $result = mysqli_query($connection, $query);
+                        if (mysqli_num_rows($result) > 0) {
+                            displayRecipes($result);
+                            $nores = false;
+                        }
+                    }else if($_SESSION['displayOption'] == 'dinner'){
+                        $query = "SELECT * FROM recipes WHERE mealtime = 'dinner'";
+                        $result = mysqli_query($connection, $query);
+                        if (mysqli_num_rows($result) > 0) {
+                            displayRecipes($result);
+                            $nores = false;
+                        }
+                    }
+                    if($nores == true){
+                        echo  '<h2 id="nohit">Nincs talalat!</h2>';
+                    }
+                    mysqli_close($connection);
+                   
+                ?>
+
+                
             </div>
                                  
             <div id="randomrecept">
@@ -85,7 +113,8 @@
                 <div id="randomrecepttext">
                     <p>Rendezes</p>
                 </div>
-                <form action="changemealtime.php" type="post">
+
+                <form action="changemealtime.php" method="post">
                     <button class="timeofdaybutton" type="submit" name="mealtime" value="breakfast">Reggeli</button>
                 </form>
 
@@ -96,7 +125,9 @@
                 <form action="changemealtime.php" method="post">
                     <button class="timeofdaybutton" type="submit" name="mealtime" value="dinner">Vacsora</button>
                 </form>
+                
             </div>
         </div>
+        <?php include('footer.php'); ?>
     </body>
 </html>
