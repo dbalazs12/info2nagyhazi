@@ -1,6 +1,6 @@
 <?php 
     include 'db.php';
-
+    
     if(isset($_POST['submitfavorite'])){
         $recipe_id = $_POST['recipe_id'];
         session_start();

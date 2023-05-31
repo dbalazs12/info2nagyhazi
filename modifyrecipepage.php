@@ -3,6 +3,7 @@
     <?php 
         error_reporting(E_ALL & ~E_NOTICE);
         session_start();
+        //megjelenes beallitasa
         if($_SESSION['pagecolor'] == 'green'){
             $cssfile = 'green_gray.css';
         }else if ($_SESSION['pagecolor'] == 'brown'){
@@ -17,38 +18,37 @@
     </head>
 
     <?php
-    include('db.php');
-    $connection = getDb();
-    //session start nelkul valamiert nem mukodik, ugyhogy esztetikai okokbol elrejtem a 
-    //notice-t, arrol hogy mar van egy meglevo sessionom
-    error_reporting(E_ALL & ~E_NOTICE);
-    
-    session_start();
-    if(!isset($_SESSION['badmodify'])){
-        $_SESSION['badmodify'] = 'false';
-    }
-    var_dump($_SESSION['badmodify']);
+        include('db.php');
+        $connection = getDb();
+        //session start nelkul valamiert nem mukodik, ugyhogy esztetikai okokbol elrejtem a 
+        //notice-t, arrol hogy mar van egy meglevo sessionom
+        error_reporting(E_ALL & ~E_NOTICE);
+        
+        session_start();
+        // ha rossz volt a valtoztatas akkor hiba
+        if(!isset($_SESSION['badmodify'])){
+            $_SESSION['badmodify'] = 'false';
+        }
 
-    if($_SESSION['badmodify'] == 'false'){
-        echo '<style>#modifyerror { display:none; }</style>';
-    }
+        if($_SESSION['badmodify'] == 'false'){
+            echo '<style>#modifyerror { display:none; }</style>';
+        }
 
+        //megfelelo recept adatait helyettesitse be
+        $recipe_id = $_GET['id'];
+        
+        $query = "SELECT * FROM recipes WHERE recipe_id = $recipe_id";
+        $result = mysqli_query($connection, $query);
+        
+        $row = mysqli_fetch_assoc($result);
 
-    $recipe_id = $_GET['id'];
-    
-    $query = "SELECT * FROM recipes WHERE recipe_id = $recipe_id";
-    $result = mysqli_query($connection, $query);
-    
-    $row = mysqli_fetch_assoc($result);
-
-    $recipename = $row['recipe_name'];
-    $servingsize = $row['serving_size'];
-    $preparationtime = $row['preparation_time'];
-    $cookingtime = $row['cooking_time'];
-    $ingredients = $row['ingredients'];
-    $instructions = $row['instructions'];
-    $mealtime = $row['mealtime'];
-
+        $recipename = $row['recipe_name'];
+        $servingsize = $row['serving_size'];
+        $preparationtime = $row['preparation_time'];
+        $cookingtime = $row['cooking_time'];
+        $ingredients = $row['ingredients'];
+        $instructions = $row['instructions'];
+        $mealtime = $row['mealtime'];
     ?>
 
 
@@ -56,15 +56,15 @@
         <?php include('header.php'); ?>
         <div id="frame">
             <div id="recipebox">
-                <h1 id="modifyrecipetext">RECEPT MODOSITASA</h1></br> 
+                <h1 id="modifyrecipetext">RECEPT MÓDOSÍTÁSA</h1></br> 
                 <!--receptnev-->
-                <a id="modifyerror">Sikertelen feltoltes! Kerem ellenorizzen minden mezot!</a>
-                <form action="modifyrecipe.php" method="post">
+                <a id="modifyerror">Sikertelen feltöltés! Kérem ellenőrízzen minden mezőt!</a>
+                <form action="modifyrecipe.php" method="post" enctype="multipart/form-data">
                     <h2 style="color: #777; font-size: 28px;">Recept neve:</br>
                         <input id="recipename" type="text" name="recipename" value="<?php echo $recipename?>"></br>    
                     <h2>
                     <!--hany fore dropdown-->
-                    <label for="quantity" style="color: #777; font-size: 28px;">Adag(Fo):</label>
+                    <label for="quantity" style="color: #777; font-size: 28px;">Adag(Fő):</label>
                         <select class="dropdown" name="servingsize">
                         <option value="1"<?php if ($servingsize == 1) echo 'selected'; ?>>1</option>
                         <option value="2"<?php if ($servingsize == 2) echo 'selected'; ?>>2</option>
@@ -76,7 +76,7 @@
                     </select>
                     <!--elokeszitesi ido-->
                     <h2>
-                        <label for="quantity" style="color: #777; font-size: 28px;">Elokeszitesi ido:</label>
+                        <label for="quantity" style="color: #777; font-size: 28px;">Előkészítési idő:</label>
                             <select class="dropdown" name="preparation_time">
                             <option value="5"<?php if ($preparationtime == 5) echo 'selected'; ?>>5 perc</option>
                             <option value="10"<?php if ($preparationtime == 10) echo 'selected'; ?>>10 perc</option>
@@ -88,7 +88,7 @@
                     </h2>
                     <!--Fozesi/sutesi ido-->
                     <h2>
-                        <label for="quantity" style="color: #777; font-size: 28px;">Fozesi/sutesi ido:</label>
+                        <label for="quantity" style="color: #777; font-size: 28px;">Főzési/sütési idő:</label>
                         <select class="dropdown" name="cooking_time">
                             <option value="5"<?php if ($cookingtime == 5) echo 'selected'; ?>>5 perc</option>
                             <option value="10"<?php if ($cookingtime == 10) echo 'selected'; ?>>10 perc</option>
@@ -102,25 +102,29 @@
                     </h2>
                     <!--alapanyagok--> 
                     <h2 style="color: #777; font-size: 28px;">
-                        Hozzavalok:<br/>
+                        Hozzávalók:<br/>
                         <textarea name="ingredients" class="recipeinput"><?php echo $ingredients?></textarea>
                     </h2>
                     <!--elkeszites-->
                     <h2 style="color: #777; font-size: 28px;">
-                        Elkeszites:<br/>
+                        Elkészítés:<br/>
                         <textarea name="instructions" class="recipeinput"><?php echo $instructions?></textarea>
                     </h2>
                     <h2>
-                        <label for="quantity" style="color: #777; font-size: 28px;">Kategoria:</label>
+                        <label for="quantity" style="color: #777; font-size: 28px;">Kategória:</label>
                             <select class="dropdown" name="mealtime">
                             <option value="Reggeli"<?php if ($mealtime == 'breakfast') echo 'selected'; ?>>Reggeli</option>
-                            <option value="Ebed"<?php if ($mealtime == 'lunch') echo 'selected'; ?>>Ebed</option>
+                            <option value="Ebed"<?php if ($mealtime == 'lunch') echo 'selected'; ?>>Ebéd</option>
                             <option value="Vacsora"<?php if ($mealtime == 'dinner') echo 'selected'; ?>>Vacsora</option>
                         </select>
                     </h2>
+
+                    <input id="uploadimagebutton" type="file" name="image" >
+        
+                    </br>
                     <!-- a recipe_id -t is at kell adnom-->
                     <input type="hidden" name="recipe_id" value="<?php echo $recipe_id; ?>">
-                    <button type="submit" name="submit">Modositas</button>
+                    <button id="uploadrecipebutton" type="submit" name="submit">Módosítás</button>
 
                 </form>
             </div>

@@ -13,18 +13,20 @@
     
     ?>
     <div id="headerleft" onclick="window.location.href='changetoall.php';">
-        <!--bal oldali kek dolog-->
+        <!--bal oldal-->
         <img src=<?php echo $pngfile ?>>
-        <p>AMITOL A SZELLEM IS JOLLAKIK</p>
+        <p>AMITŐL A SZELLEM IS JÓLLAKIK</p>
     </div>
         
         <?php
             session_start();
+            //ha nincs bejelentkezve legyen vendeg
             if(!isset($_SESSION['user_type'])){
                 $_SESSION['user_type'] = 'guest';
             }
-            echo 'a aaaaaaaaaaaaaaaaaaaaaaaaaaaaa |';
             
+
+            //ha be van jelentkezve valtozzon meg a bejelentkezes gomb kijelentkezesre
             if (isset($_SESSION['user_id']) && isset($_SESSION['user_type'])) {
                 echo '<style>#headerloginbutton { display:none; }</style>';
                 echo '<style>#headerrighttext { display:none; }</style>';
@@ -33,16 +35,11 @@
                 echo '<style>#smalllogoutbutton { display:none; }</style>';
                 echo '<style>#usernamedisplay { display:none; }</style>';
             }
-
+            
+            // adminpage gomb
             if($_SESSION['user_type'] != 'admin'){
                 echo '<style>#adminbutton { display:none; }</style>';
             }
-
-            //a felhasznalo eleresi koreihez megnezem a tipusat
-            if(!isset($_SESSION['user_type'])){
-                $_SESSION['user_type'] = 'guest';
-            } 
-            var_dump($_SESSION['user_type']);
 
             if(!isset($_SESSION['user_id'])){
                 $_SESSION['user_id'] = NULL;
@@ -54,39 +51,36 @@
         
             if (!isset($_SESSION['displayOption'])){
                 $_SESSION['displayOption'] = 'all';
-            }        
-            var_dump('.     displaygeci:  ' . $_SESSION['displayOption']);   
+            }         
         
             //keresogomb alapbeallitas
             if(!isset($_SESSION['searchline'])){
                 $_SESSION['searchline'] = NULL;
             }
-            var_dump($_SESSION['searchline']);
-            var_dump($_SESSION['user_type']);
 
             //pagecolor beallitasa
             if(!isset($_SESSION['pagecolor'])){
                 $_SESSION['pagecolor'] = 'green';
             }
-            var_dump($_SESSION['pagecolor']);
-
 
         ?>
+        <!-- jobb oldal -->
         <div id="headerright">
             <!--profil-->
             <img src=<?php echo $userpngfile?> id="userimage">
             <a id="headerrighttext">Profil</a>
             <a id="usernamedisplay"> <?php echo $_SESSION['username']; ?></a>
             
+            <!--gombok-->
             <form action="loginpage.php">
-                <button id="headerloginbutton" type="submit">Bejelentkezes</button>
+                <button id="headerloginbutton" type="submit">Bejelentkezés</button>
             </form>
             <form action="logout.php">              <!--valamiert csak igy latja-->          
-                <button id="smalllogoutbutton" type="submit">Kijelentkezes</button>
+                <button id="smalllogoutbutton" type="submit">Kijelentkezés</button>
             
             </form>
             <form action="adminpage.php">
-                <button id="adminbutton" type="submit">Moderacio</button>
+                <button id="adminbutton" type="submit">Moderáció</button>
             </form>
             <form action="updatecolor.php" method="post">
                 <button type="submit" id="colorbuttongreen" name="colorbutton" value="green"></button>
@@ -94,20 +88,18 @@
             </form>
             
         </div>
-
+    <!-- header alatti bar -->
     <?php 
         if($_SESSION['user_type'] == 'guest'){
             $redirectupload = 'loginpage.php';
-            $redirectfavorites = 'loginpage.php';
         }
         else {
             $redirectupload = 'newrecipepage.php';
-            $redirectfavorites = 'mainpage.php?displayOption=favorites';
         }
     ?>
     <div id="menubox">
-        <a class="custom-button" href=changetoall.php>Fooldal</a>
-        <a class="custom-button" href=<?php echo $redirectupload; ?>>Recept feltoltes</a> 
+        <a class="custom-button" href=changetoall.php>Főoldal</a>
+        <a class="custom-button" href=<?php echo $redirectupload; ?>>Recept feltöltés</a> 
         <a class="custom-button" href=changetofavorites.php>Kedvencek</a>
     </div>
 </div>

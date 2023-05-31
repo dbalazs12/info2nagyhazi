@@ -3,6 +3,7 @@
     <?php 
         error_reporting(E_ALL & ~E_NOTICE);
         session_start();
+        //megjelenes beallitasa
         if($_SESSION['pagecolor'] == 'green'){
             $cssfile = 'green_gray.css';
         }else if ($_SESSION['pagecolor'] == 'brown'){
@@ -27,7 +28,6 @@
                             echo '<style>#deletebutton { display:none; }</style>';
                             echo '<style>#favoritebutton { display:none; }</style>';
                             echo '<style>#modifybutton { display:none; }</style>';
-                            // echo '<style>#favoritebutton { position:relative; left:378px; }</style>';
                         }
                     //modositas gomb elrejtes
                     if ($_SESSION['user_type'] == 'common') {
@@ -38,8 +38,9 @@
                     
                         if (mysqli_num_rows($result)  == 0) {       
                             echo '<style>#modifybutton { display: none; }</style>';
+                            echo '<style>#deletebutton { display:none; }</style>';
                         }
-                        echo '<style>#deletebutton { display:none; }</style>';
+                        
                     }
 
                     //kinezet miatt kell
@@ -53,7 +54,7 @@
                     
                     $query = "SELECT * FROM favorites WHERE user_id = '$user_id' AND recipe_id = '$recipe_id'";
                     $result = mysqli_query($connection, $query);
-
+                    // annak a felteteleben hogy benne van a kedvencekben melyik gomb jelenjen meg
                     if ($result->num_rows > 0) {
                         echo '<style>#favoritebutton { display:none; }</style>';
                     }else{
@@ -92,14 +93,15 @@
                             echo "</br>";
                             echo "<div id='general'>";
                                 echo "<div id='generalinfo'>";
-                                    echo "Informaciok";
+                                    echo "Információk";
                                 echo "</div>";
                                 
-                                echo "<p>Elokeszitesi ido: " . $row['preparation_time'] . " perc</p>";
-                                echo "<p>Elkeszetesi ido: " . $row['cooking_time'] . " perc</p>";
-                                echo "<p>Serving size: " . $row['serving_size'] . ' fo' . "</p>";
-                                echo "<p>Hozzavalok:</p>";
+                                echo "<p>Előkészítési idő: " . $row['preparation_time'] . " perc</p>";
+                                echo "<p>Elkészítési idő: " . $row['cooking_time'] . " perc</p>";
+                                echo "<p>Adag: " . $row['serving_size'] . ' fő' . "</p>";
+                                echo "<p>Hozzávalók:</p>";
                                 echo "<ul>";
+                                //ezzel tudom kulon sorba irni
                                 $ingredients = explode(",", $row['ingredients']);
                                 foreach ($ingredients as $ingredient) {
                                     echo "<li>" . trim($ingredient) . "</li>";
@@ -109,11 +111,12 @@
 
                             echo "<div id='instructions'>";
                                 echo "<div id='instructiontext'>";
-                                    echo "Elkeszites";
+                                    echo "Elkészítés";
                                 echo "</div>";
                                 echo "</br></br></br>";
                                 echo $row['instructions'];
                             echo "</div>";
+                            // kedvenc-kivetel kedvencekbol- torles- modositas gomb
                             echo "<div id='buttonrow'>";
                                     echo "<form action='addtofavorite.php' method='post'>";
                                         echo "<input type='hidden' name='recipe_id' value='" . $row['recipe_id'] . "'>";    

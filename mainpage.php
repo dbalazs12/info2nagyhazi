@@ -4,6 +4,7 @@
     <?php 
         error_reporting(E_ALL & ~E_NOTICE);
         session_start();
+        //megjelenes beallitasa
         if($_SESSION['pagecolor'] == 'green'){
             $cssfile = 'green_gray.css';
         }else if ($_SESSION['pagecolor'] == 'brown'){
@@ -34,6 +35,7 @@
                     <p>Receptkereso</p>
                 </div>
             </div>
+            <!-- a recepteket megjelenito frame -->
             <div id="receptframe">
                 <?php
                 
@@ -43,6 +45,7 @@
                     $connection = getDb();
                     $nores = true;
 
+                    //ha van kereses akkor azokat jelenitse meg
                     if($_SESSION['searchline'] != NULL){ 
                         $searchline = $_SESSION['searchline'];
                         $query = "SELECT * FROM recipes WHERE recipe_name LIKE '%$searchline%'";
@@ -52,7 +55,7 @@
                             $nores = false;
                         }
                         $_SESSION['searchline'] = NULL;
-            
+                    // alapbeallitas, minden jelenjen meg
                     }else if($_SESSION['displayOption'] == 'all'){
                         $query = "SELECT * FROM recipes";
                         $result = mysqli_query($connection, $query);
@@ -60,6 +63,7 @@
                             displayRecipes($result);
                             $nores = false;
                         }
+                    // csak a kedvencek jelenjenek meg
                     }else if($_SESSION['displayOption'] == 'favorites'){
                         $query = "SELECT * FROM favorites WHERE user_id = '" . $_SESSION['user_id'] . "'";;
                         $result = mysqli_query($connection, $query);
@@ -67,6 +71,7 @@
                             displayRecipes($result);
                             $nores = false;
                         }
+                    // csak a reggeli jelenjen meg
                     }else if($_SESSION['displayOption'] == 'breakfast'){
                         $query = "SELECT * FROM recipes WHERE mealtime = 'breakfast'";
                         $result = mysqli_query($connection, $query);
@@ -74,6 +79,7 @@
                             displayRecipes($result);
                             $nores = false;
                         }
+                    // csak az ebed jelenjen meg
                     }else if($_SESSION['displayOption'] == 'lunch'){
                         $query = "SELECT * FROM recipes WHERE mealtime = 'lunch'";
                         $result = mysqli_query($connection, $query);
@@ -81,6 +87,7 @@
                             displayRecipes($result);
                             $nores = false;
                         }
+                    // csak a vacsora jelenjen meg
                     }else if($_SESSION['displayOption'] == 'dinner'){
                         $query = "SELECT * FROM recipes WHERE mealtime = 'dinner'";
                         $result = mysqli_query($connection, $query);
@@ -89,6 +96,7 @@
                             $nores = false;
                         }
                     }
+                    // ha a keresesnel (vagy barmikor) nincs talalat irja ki
                     if($nores == true){
                         echo  '<h2 id="nohit">Nincs talalat!</h2>';
                     }
@@ -98,7 +106,7 @@
 
                 
             </div>
-                                 
+            <!-- veletlen recept gomb -->                     
             <div id="randomrecept">
                 
                 <div id="randomrecepttext">
@@ -108,7 +116,7 @@
                     <button id="randombutton" type="submit">Lepj meg!</button>
                 </form>
             </div>
-            
+            <!-- reggeli, ebed, vacsora gombok -->
             <div id="category">  
                 <div id="randomrecepttext">
                     <p>Rendezes</p>
